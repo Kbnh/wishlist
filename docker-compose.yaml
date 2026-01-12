@@ -1,0 +1,26 @@
+services:
+  application:
+    build: .
+    container_name: app-container
+    ports:
+      - "${PORT}:5050"
+    environment:
+      - PORT=${PORT}
+      - DB_HOST=postgres
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:18-bookworm
+    container_name: postgres-container
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_NAME=${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - ".out/pgdata:/var/lib/postgresql"
